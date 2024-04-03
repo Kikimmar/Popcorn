@@ -1,0 +1,13 @@
+/Popcorn
+/x64
+/.vs
+Popcorn.vcxproj.filters
+framework.h
+Resource.h
+targetver.h
+Popcorn.ico
+small.ico
+Popcorn.rc
+Popcorn.sln
+Popcorn.vcxproj.user
+Popcorn.vcxproj
