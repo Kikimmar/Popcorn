@@ -10,6 +10,14 @@ HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 
+const int Global_Scale = 3;
+const int Brick_Width = 15;
+const int Brick_Height = 7;
+const int Cell_Width = 16;
+const int Cell_Height = 8;
+const int Level_X_Offset = 8;
+const int Level_Y_Offset = 6;
+
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -99,13 +107,14 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    RECT window_rect;
    window_rect.left = 0;
    window_rect.top = 0;
-   window_rect.right = 320 * 3;
-   window_rect.bottom = 200 * 3;
+   window_rect.right = 320 * Global_Scale;
+   window_rect.bottom = 200 * Global_Scale;
 
    AdjustWindowRect(&window_rect, WS_OVERLAPPEDWINDOW, TRUE);
 
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      0, 0, window_rect.right - window_rect.left, window_rect.bottom - window_rect.top, nullptr, nullptr, hInstance, nullptr);
+      0, 0, window_rect.right - window_rect.left, window_rect.bottom - window_rect.top, 
+      nullptr, nullptr, hInstance, nullptr);
 
    if (hWnd == 0) 
       return FALSE;
@@ -116,9 +125,35 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 //====================================================================================================
+void DrawBrick(HDC hdc, int x, int y, bool is_blue)
+{//Отрисовка "кирпича"
+   HPEN pen;
+   HBRUSH brush;
+
+   if (is_blue)
+   {
+      pen = CreatePen(PS_SOLID, 0, RGB(85, 255, 255));
+      brush = CreateSolidBrush(RGB(85, 255, 255));
+   }
+   else
+   {
+      pen = CreatePen(PS_SOLID, 0, RGB(255, 85, 255));
+      brush = CreateSolidBrush(RGB(255, 85, 255));
+   }
+
+   SelectObject(hdc, pen);
+   SelectObject(hdc, brush);
+   Rectangle(hdc, x * Global_Scale, y * Global_Scale,
+      (x + Brick_Width) * Global_Scale, (y + Brick_Height) * Global_Scale);
+}
+//====================================================================================================
 void DrawFrame(HDC hdc)
 {//Отрисовка экрана игры
+   int i, j;
 
+   for (i = 0; i < 14; i++)
+      for (j = 0; j < 12; j++)
+         DrawBrick(hdc, Level_X_Offset + j * Cell_Width, Level_Y_Offset + i * Cell_Height, true);
 }
 //====================================================================================================
 //
