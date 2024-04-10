@@ -1,5 +1,6 @@
 #pragma once
+
 #include <Windows.h>
 
 void Init();
-void DrawFrame(HDC hdc);
+void Draw_Frame(HDC hdc);
